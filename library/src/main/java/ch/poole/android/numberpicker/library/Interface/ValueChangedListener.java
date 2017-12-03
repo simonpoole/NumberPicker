@@ -1,6 +1,6 @@
-package com.travijuu.numberpicker.library.Interface;
+package ch.poole.android.numberpicker.library.Interface;
 
-import com.travijuu.numberpicker.library.Enums.ActionEnum;
+import ch.poole.android.numberpicker.library.Enums.ActionEnum;
 
 /**
  * Created by travijuu on 19/12/16.

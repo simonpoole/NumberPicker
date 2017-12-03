@@ -1,4 +1,4 @@
-package com.travijuu.numberpicker.library;
+package ch.poole.android.numberpicker.library;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

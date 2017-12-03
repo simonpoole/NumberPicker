@@ -1,10 +1,9 @@
 NumberPicker 
 ============
 
-[![Build Status](https://travis-ci.org/travijuu/NumberPicker.svg?branch=master)](https://travis-ci.org/travijuu/NumberPicker) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.travijuu/numberpicker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.travijuu/numberpicker)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-NumberPicker-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5838)
-
 A simple customizable NumberPicker for Android.
+
+This is a fork of https://github.com/travijuu/NumberPicker, the main difference is that it adds support for long pressing on the in-/decrement buttons. Currently the sample app is broken, will fix asap.
 
 <img src="https://raw.githubusercontent.com/travijuu/NumberPicker/master/images/numberpicker.png" width=450/>
 
@@ -13,14 +12,19 @@ Installation
 
 via Gradle:
 ```groovy
-compile 'com.github.travijuu:numberpicker:1.0.7'
+repositories {
+ 	...
+	maven { url 'https://dl.bintray.com/content/simonpoole/android' }
+}
+    
+compile 'ch.poole.android:numberpicker:1.0.8'
 ```
 or Maven:
 ```xml
 <dependency>
-  <groupId>com.github.travijuu</groupId>
+  <groupId>ch.poole.android</groupId>
   <artifactId>numberpicker</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <type>aar</type>
 </dependency>
 ```
@@ -41,7 +45,7 @@ Add NumberPicker component in your XML layout
     xmlns:numberpicker="http://schemas.android.com/apk/res-auto"
     tools:context="com.travijuu.numberpicker.sample.MainActivity">
 
-    <com.travijuu.numberpicker.library.NumberPicker
+    <ch.poole.android.numberpicker.library.NumberPicker
         android:id="@+id/number_picker"
         android:layout_width="130dp"
         android:layout_height="40dp"
@@ -59,7 +63,7 @@ Add NumberPicker component in your XML layout
 *MainActivity.java*
 
 ```java
-import com.travijuu.numberpicker.library.NumberPicker;
+import ch.poole.androidnumberpicker.library.NumberPicker;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,6 +91,7 @@ XML Attributes
 | max           | int     | 999999  |
 | value         | int     | 1       |
 | unit          | int     | 1       |
+| repeat        | int     | 200     |
 | focusable     | boolean | false   |
 | custom_layout | layout  | @layout/number_picker_layout |
 
@@ -167,6 +172,9 @@ Sets unit value for increment/decrement operation
 
 ### getUnit()
 Gets unit value 
+
+### setRepeat(int repeat)
+Sets time between in-/decrements in milliseconds when the buttons are long clicked
 
 ### setValue(int value)
 Sets NumberPicker current value 

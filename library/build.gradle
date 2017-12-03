@@ -1,14 +1,22 @@
+plugins {
+  id "com.jfrog.bintray" version "1.7.1"
+  id "org.sonarqube" version "2.6.1"
+}
+
 apply plugin: 'com.android.library'
 
+apply from: 'https://raw.githubusercontent.com/simonpoole/gradle-tasks/master/eclipse-android'
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion 9
+        targetSdkVersion 24
         versionCode versionCode
         versionName version
+        setProperty("archivesBaseName", NAME)
     }
     buildTypes {
         release {
@@ -24,9 +32,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 }
 
-// Place it at the end of the file
-apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+apply from: 'https://raw.githubusercontent.com/simonpoole/gradle-tasks/master/publish-on-bintray-android'

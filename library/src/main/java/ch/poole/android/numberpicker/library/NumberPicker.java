@@ -1,22 +1,24 @@
-package com.travijuu.numberpicker.library;
+package ch.poole.android.numberpicker.library;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.travijuu.numberpicker.library.Enums.ActionEnum;
-import com.travijuu.numberpicker.library.Interface.LimitExceededListener;
-import com.travijuu.numberpicker.library.Interface.ValueChangedListener;
-import com.travijuu.numberpicker.library.Listener.ActionListener;
-import com.travijuu.numberpicker.library.Listener.DefaultLimitExceededListener;
-import com.travijuu.numberpicker.library.Listener.DefaultOnFocusChangeListener;
-import com.travijuu.numberpicker.library.Listener.DefaultValueChangedListener;
-import com.travijuu.numberpicker.library.Listener.DefaultOnEditorActionListener;
+import ch.poole.android.numberpicker.library.Enums.ActionEnum;
+import ch.poole.android.numberpicker.library.Interface.LimitExceededListener;
+import ch.poole.android.numberpicker.library.Interface.ValueChangedListener;
+import ch.poole.android.numberpicker.library.Listener.ActionListener;
+import ch.poole.android.numberpicker.library.Listener.DefaultLimitExceededListener;
+import ch.poole.android.numberpicker.library.Listener.DefaultOnEditorActionListener;
+import ch.poole.android.numberpicker.library.Listener.DefaultOnFocusChangeListener;
+import ch.poole.android.numberpicker.library.Listener.DefaultValueChangedListener;
 
 /**
  * Created by travijuu on 26/05/16.
@@ -30,6 +32,7 @@ public class NumberPicker extends LinearLayout {
     private final int DEFAULT_UNIT = 1;
     private final int DEFAULT_LAYOUT = R.layout.number_picker_layout;
     private final boolean DEFAULT_FOCUSABLE = false;
+    private final int DEFAULT_REPEAT = 200;
 
     // required variables
     private int minValue;
@@ -38,6 +41,8 @@ public class NumberPicker extends LinearLayout {
     private int currentValue;
     private int layout;
     private boolean focusable;
+    private int repeat;
+    private boolean longPressInProgress;
 
     // ui components
     private Context mContext;
@@ -73,6 +78,7 @@ public class NumberPicker extends LinearLayout {
         this.unit = attributes.getInteger(R.styleable.NumberPicker_unit, this.DEFAULT_UNIT);
         this.layout = attributes.getResourceId(R.styleable.NumberPicker_custom_layout, this.DEFAULT_LAYOUT);
         this.focusable = attributes.getBoolean(R.styleable.NumberPicker_focusable, this.DEFAULT_FOCUSABLE);
+        this.repeat = attributes.getInteger(R.styleable.NumberPicker_repeat, this.DEFAULT_REPEAT);
         this.mContext = context;
 
         // if current value is greater than the max. value, decrement it to the max. value
@@ -90,9 +96,60 @@ public class NumberPicker extends LinearLayout {
         this.displayEditText = (EditText) findViewById(R.id.display);
 
         // register button click and action listeners
-        this.incrementButton.setOnClickListener(new ActionListener(this, this.displayEditText, ActionEnum.INCREMENT));
-        this.decrementButton.setOnClickListener(new ActionListener(this, this.displayEditText, ActionEnum.DECREMENT));
-
+        
+        final ActionListener incrementListener = new ActionListener(this, this.displayEditText, ActionEnum.INCREMENT);
+        this.incrementButton.setOnClickListener(incrementListener);
+        final ActionListener decrementListenerer = new ActionListener(this, this.displayEditText, ActionEnum.DECREMENT);
+        this.decrementButton.setOnClickListener(decrementListenerer);
+        
+        final Handler mHandler = new Handler();
+        final Runnable incrementRunnable = new Runnable() {
+            public void run() {
+                if (longPressInProgress) {
+                    incrementListener.onClick(null);
+                    mHandler.postDelayed(this, repeat);
+                }
+            }
+        };
+        final Runnable decrementRunnable = new Runnable() {
+            public void run() {
+                if (longPressInProgress) {
+                    decrementListenerer.onClick(null);
+                    mHandler.postDelayed(this, repeat);
+                }
+            }
+        };
+        
+        OnLongClickListener longClickListener = new OnLongClickListener() {
+            /**
+             */
+            @Override
+            public boolean onLongClick(View v) {
+                clearFocus();
+                longPressInProgress = true;
+                if (R.id.increment == v.getId()) {
+                    mHandler.post(incrementRunnable);
+                } else if (R.id.decrement == v.getId()) {
+                    mHandler.post(decrementRunnable);
+                }
+                return true;
+            }
+        };
+        this.incrementButton.setOnLongClickListener(longClickListener);
+        OnTouchListener onTouchListener = new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEvent.ACTION_BUTTON_RELEASE == event.getActionMasked()
+                        || MotionEvent.ACTION_UP == event.getActionMasked()) {
+                    longPressInProgress = false;
+                }
+                return false;
+            }};
+        this.incrementButton.setOnTouchListener(onTouchListener);
+           
+        this.decrementButton.setOnLongClickListener(longClickListener);
+        this.decrementButton.setOnTouchListener(onTouchListener);
+        
         // init listener for exceeding upper and lower limits
         this.setLimitExceededListener(new DefaultLimitExceededListener());
         // init listener for increment&decrement
@@ -137,6 +194,15 @@ public class NumberPicker extends LinearLayout {
         return this.unit;
     }
 
+    /**
+     * Set the interval between increments when the buttons are long clicked
+     * 
+     * @param repeat interval in milliseconds
+     */
+    public void setRepeat(int repeat) {
+        this.repeat = repeat;
+    }
+    
     public int getMin() {
         return this.minValue;
     }

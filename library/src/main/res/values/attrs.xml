@@ -8,6 +8,7 @@
         <attr name="unit" format="integer" />
         <attr name="custom_layout" format="reference" />
         <attr name="focusable" format="boolean" />
+        <attr name="repeat" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="Themes">

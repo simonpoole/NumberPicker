@@ -1,4 +1,4 @@
-package com.travijuu.numberpicker.library.Enums;
+package ch.poole.android.numberpicker.library.Enums;
 
 /**
  * Created by travijuu on 26/05/16.

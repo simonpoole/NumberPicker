@@ -1,8 +1,7 @@
-package com.travijuu.numberpicker.library.Listener;
+package ch.poole.android.numberpicker.library.Listener;
 
 import android.util.Log;
-
-import com.travijuu.numberpicker.library.Interface.LimitExceededListener;
+import ch.poole.android.numberpicker.library.Interface.LimitExceededListener;
 
 /**
  * Created by travijuu on 26/05/16.

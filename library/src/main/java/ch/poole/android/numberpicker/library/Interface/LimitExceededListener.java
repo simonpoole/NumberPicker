@@ -1,4 +1,4 @@
-package com.travijuu.numberpicker.library.Interface;
+package ch.poole.android.numberpicker.library.Interface;
 
 /**
  * Created by travijuu on 26/05/16.

@@ -1,10 +1,9 @@
-package com.travijuu.numberpicker.library.Listener;
+package ch.poole.android.numberpicker.library.Listener;
 
 import android.view.View;
 import android.widget.EditText;
-
-import com.travijuu.numberpicker.library.Enums.ActionEnum;
-import com.travijuu.numberpicker.library.NumberPicker;
+import ch.poole.android.numberpicker.library.NumberPicker;
+import ch.poole.android.numberpicker.library.Enums.ActionEnum;
 
 /**
  * Created by travijuu on 03/06/17.
