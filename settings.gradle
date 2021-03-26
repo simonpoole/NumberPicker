@@ -1,1 +1,1 @@
-include ':np-library',':np-sample'
+include ':library',':sample'

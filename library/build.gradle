@@ -1,17 +1,21 @@
-apply plugin: 'com.android.application'
+plugins {
+    id "org.sonarqube" version "3.0"
+}
+
 apply plugin: 'eclipse'
+apply plugin: 'com.android.library'
 
 apply from: 'https://raw.githubusercontent.com/simonpoole/gradle-tasks/master/eclipse-android-3'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
-
+    
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.0"
+        minSdkVersion 9
+        targetSdkVersion 24
+        versionCode versionCode
+        versionName version
+        setProperty("archivesBaseName", NAME)
     }
     buildTypes {
         release {
@@ -27,8 +31,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    // implementation project(':np-library')
-    implementation 'ch.poole.android:numberpicker:1.0.9'
+    androidTestImplementation 'junit:junit:4.12'
 }
+
+apply from: 'https://raw.githubusercontent.com/simonpoole/gradle-tasks/master/publish-on-sonatype-android'
